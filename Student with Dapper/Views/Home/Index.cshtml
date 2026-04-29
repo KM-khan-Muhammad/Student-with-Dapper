@@ -1,0 +1,56 @@
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="hero-section">
+    <div class="container">
+        <h1 class="display-3 fw-bold mb-3 animate-slide-up" style="letter-spacing: -0.02em;">
+            Empowering <span class="text-primary-emphasis">Future Leaders</span>
+        </h1>
+        <p class="lead mb-5 animate-slide-up text-secondary-emphasis" style="animation-delay: 0.1s; opacity: 0.9;">
+            Experience the next generation of student management. Seamless, performant, and beautiful.
+        </p>
+        
+        <div class="row g-4 justify-content-center animate-scale-in" style="animation-delay: 0.2s;">
+            <div class="col-md-3">
+                <div class="glass-card h-100 text-center">
+                    <div class="mb-3 text-primary"><i class="fas fa-bolt fs-1"></i></div>
+                    <h5 class="fw-bold">Fast Performance</h5>
+                    <p class="text-muted small">Powered by Dapper for lightning-fast database operations.</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="glass-card h-100 text-center">
+                    <div class="mb-3 text-secondary"><i class="fas fa-layer-group fs-1"></i></div>
+                    <h5 class="fw-bold">Clean Design</h5>
+                    <p class="text-muted small">A modern UI built with glassmorphism and smooth animations.</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="glass-card h-100 text-center">
+                    <div class="mb-3 text-accent"><i class="fas fa-shield-halved fs-1"></i></div>
+                    <h5 class="fw-bold">Secure Data</h5>
+                    <p class="text-muted small">Your student records are safe with our robust architecture.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-5 animate-slide-up" style="animation-delay: 0.3s;">
+            <a asp-controller="Students" asp-action="Index" class="btn btn-primary btn-lg px-5 py-3 rounded-pill fw-bold shadow-lg border-0" style="transition: var(--transition); background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));">
+                <i class="fas fa-arrow-right me-2"></i>Explore Directory
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .btn-light:hover {
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 10px 25px rgba(255, 255, 255, 0.2);
+    }
+    
+    .text-accent {
+        color: #f472b6;
+    }
+</style>
+

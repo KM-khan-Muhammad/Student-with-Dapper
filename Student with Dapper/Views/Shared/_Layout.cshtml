@@ -1,0 +1,866 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Student Management System</title>
+    <script type="importmap"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Student_with_Dapper.styles.css" asp-append-version="true" />
+    
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --primary-light: #818cf8;
+            --primary-dark: #4f46e5;
+            --secondary-color: #a855f7;
+            --accent-color: #f472b6;
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(0, 0, 0, 0.05);
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 32px rgba(0, 0, 0, 0.15);
+        }
+
+        [data-bs-theme="dark"] {
+            --glass-bg: rgba(30, 41, 59, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary-color: #818cf8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: radial-gradient(circle at top right, #6366f1, transparent),
+                        radial-gradient(circle at bottom left, #a855f7, transparent),
+                        #f8fafc;
+            min-height: 100vh;
+            position: relative;
+            color: var(--text-main);
+            transition: background 0.5s ease;
+        }
+
+        [data-bs-theme="dark"] body {
+            background: radial-gradient(circle at top right, #312e81, transparent),
+                        radial-gradient(circle at bottom left, #581c87, transparent),
+                        #0f172a;
+        }
+
+        /* Subtle background pattern removed for simplicity */
+        body::before {
+            display: none;
+        }
+
+        /* Navbar - Subtle enhancement */
+        .navbar {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+            padding: 0.85rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: var(--transition);
+        }
+
+        .navbar.scrolled {
+            padding: 0.65rem 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .navbar-brand {
+            font-size: 1.75rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .navbar-brand:hover {
+            transform: scale(1.02);
+        }
+
+        .navbar-brand i {
+            animation: gentleBounce 3s ease-in-out infinite;
+        }
+
+        @@keyframes gentleBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 0.25rem;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-link {
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: var(--transition);
+            color: #4a5568 !important;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            text-decoration: none;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: var(--transition);
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-color) !important;
+            transform: translateY(-1px);
+        }
+
+        .nav-link:hover::after {
+            width: 80%;
+        }
+
+        .nav-link.active {
+            color: var(--primary-color) !important;
+        }
+
+        .nav-link.active::after {
+            width: 80%;
+        }
+
+        .nav-link i {
+            transition: var(--transition);
+        }
+
+        .nav-link:hover i {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        /* Hero Section (for Home) */
+        .hero-section {
+            padding: 4rem 0;
+            text-align: center;
+            color: white;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        @@keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Animation Classes */
+        .animate-fade-in { animation: fadeIn 0.6s ease-out forwards; }
+        .animate-slide-up { animation: slideUp 0.6s ease-out forwards; }
+        .animate-scale-in { animation: scaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+
+        @@keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @@keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Custom Table Styling */
+        .table-container {
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+        }
+
+        .custom-table {
+            margin-bottom: 0;
+        }
+
+        .custom-table thead {
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .custom-table th {
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+            color: var(--primary-dark);
+            border: none;
+            padding: 1.25rem 1rem;
+        }
+
+        .custom-table td {
+            vertical-align: middle;
+            padding: 1rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+            color: var(--text-main);
+        }
+
+        /* Badge Styling */
+        .badge-custom {
+            padding: 0.4em 0.8em;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 0.8rem;
+        }
+
+        /* Form Styling */
+        .glass-form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .glass-form-label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .glass-input {
+            background: rgba(255, 255, 255, 0.5) !important;
+            border: 1px solid var(--glass-border) !important;
+            backdrop-filter: blur(5px);
+            border-radius: 12px !important;
+            padding: 0.75rem 1rem !important;
+            transition: var(--transition) !important;
+        }
+
+        .glass-input:focus {
+            background: white !important;
+            border-color: var(--primary-color) !important;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1) !important;
+            transform: translateY(-1px);
+        }
+
+        /* Main Content */
+        .main-content {
+            position: relative;
+            z-index: 1;
+            padding: 2rem 0;
+            min-height: calc(100vh - 200px);
+        }
+
+        .container-custom {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Card Styles - Subtle hover */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 1.75rem;
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: fadeIn 0.4s ease forwards;
+            opacity: 0;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .glass-card.is-visible {
+            opacity: 1;
+        }
+
+        @@keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Staggered card animation */
+        .glass-card:nth-child(1) { animation-delay: 0.1s; }
+        .glass-card:nth-child(2) { animation-delay: 0.15s; }
+        .glass-card:nth-child(3) { animation-delay: 0.2s; }
+        .glass-card:nth-child(4) { animation-delay: 0.25s; }
+
+        /* Footer - Clean & Professional */
+        .footer {
+            background: rgba(26, 26, 46, 0.95);
+            color: white;
+            padding: 3rem 0 2rem;
+            position: relative;
+            z-index: 1;
+            margin-top: 3rem;
+        }
+
+        .footer h5 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 1.25rem;
+            color: white;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .footer h5::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 35px;
+            height: 2px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 1px;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.7rem;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: none;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .footer-links a:hover {
+            color: white;
+            transform: translateX(3px);
+        }
+
+        .footer-links a i {
+            font-size: 0.75rem;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover i {
+            transform: translateX(2px);
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .social-icon {
+            width: 38px;
+            height: 38px;
+            background: rgba(255, 255, 255, 0.12);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            color: white;
+            text-decoration: none;
+        }
+
+        .social-icon:hover {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transform: translateY(-2px);
+        }
+
+        /* Loading Overlay - Simple & Clean */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.85);
+            z-index: 9999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top-color: #667eea;
+            border-radius: 50%;
+            animation: spin 0.9s linear infinite;
+        }
+
+        @@keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: white;
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        /* Toast Notifications - Professional */
+        .toast-container {
+            position: fixed;
+            top: 90px;
+            right: 20px;
+            z-index: 1050;
+            min-width: 280px;
+            max-width: 350px;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .toast-custom {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+            padding: 0.85rem 1rem;
+            animation: slideIn 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .toast-custom.success { border-left-color: #11998e; }
+        .toast-custom.error { border-left-color: #eb3349; }
+        .toast-custom.info { border-left-color: #667eea; }
+
+        @@keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .toast-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 0.85rem;
+        }
+
+        .toast-custom.success .toast-icon { background: rgba(17, 153, 142, 0.15); color: #11998e; }
+        .toast-custom.error .toast-icon { background: rgba(235, 51, 73, 0.15); color: #eb3349; }
+        .toast-custom.info .toast-icon { background: rgba(102, 126, 234, 0.15); color: #667eea; }
+
+        .toast-content {
+            flex: 1;
+            color: #2d3748;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .toast-close {
+            background: none;
+            border: none;
+            color: #718096;
+            cursor: pointer;
+            padding: 0.2rem;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .toast-close:hover {
+            color: #2d3748;
+        }
+
+        /* Buttons - Simpler & Professional */
+        .btn-primary-custom {
+            background: var(--primary-color);
+            border: none;
+            border-radius: 10px;
+            padding: 0.6rem 1.25rem;
+            font-weight: 600;
+            transition: var(--transition);
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .btn-primary-custom:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+            color: white;
+        }
+
+        .glass-input:disabled {
+            background: rgba(0, 0, 0, 0.05) !important;
+            color: var(--text-main) !important;
+            opacity: 1 !important;
+            cursor: not-allowed;
+            border-color: rgba(0, 0, 0, 0.1) !important;
+        }
+
+        [data-bs-theme="dark"] .glass-input:disabled {
+            background: rgba(255, 255, 255, 0.05) !important;
+            color: var(--text-main) !important;
+            border-color: rgba(255, 255, 255, 0.1) !important;
+        }
+
+        /* Scroll to Top Button - Subtle */
+        .scroll-top {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .scroll-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-top:hover {
+            transform: translateY(-3px);
+            background: var(--primary-dark);
+        }
+
+        /* Input Enhancements */
+        .form-control {
+            transition: var(--transition);
+            border: 1px solid #e2e8f0;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+        }
+
+        /* Table Row Hover - For Student Lists */
+        .table-hover tbody tr {
+            transition: var(--transition);
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: rgba(102, 126, 234, 0.05);
+            transform: scale(1.002);
+        }
+
+        /* Responsive */
+        @@media (max-width: 768px) {
+            .container-custom { padding: 0 1rem; }
+            .navbar-brand { font-size: 1.4rem; }
+            .nav-links { flex-direction: column; align-items: center; gap: 0.3rem; }
+            .nav-link { width: 100%; justify-content: center; padding: 0.6rem; }
+            .glass-card { padding: 1.25rem; }
+            .footer { text-align: center; }
+            .footer h5::after { left: 50%; transform: translateX(-50%); }
+            .toast-container { right: 15px; left: 15px; min-width: auto; }
+        }
+
+        /* Reduced motion support */
+        @@media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <div class="loading-text">Loading...</div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <nav class="navbar navbar-expand-lg border-bottom border-white border-opacity-10" id="navbar">
+        <div class="container-custom">
+            <div class="d-flex justify-content-between align-items-center w-100">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <i class="fas fa-graduation-cap text-primary"></i>
+                    <span>Student<span class="text-primary">MS</span></span>
+                </a>
+                
+                <div class="d-flex align-items-center gap-3">
+                    <div class="dropdown me-2">
+                        <button class="btn btn-link nav-link dropdown-toggle d-flex align-items-center gap-2 border-0" id="bd-theme" type="button" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static">
+                            <i class="fas fa-circle-half-stroke theme-icon-active"></i>
+                            <span class="d-none d-lg-inline" id="bd-theme-text">Theme</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end glass-card p-2 border-0 shadow-lg" aria-labelledby="bd-theme-text" style="min-width: 150px;">
+                            <li>
+                                <button type="button" class="dropdown-item d-flex align-items-center gap-2 rounded-2" data-bs-theme-value="light">
+                                    <i class="fas fa-sun opacity-50"></i> Light
+                                </button>
+                            </li>
+                            <li>
+                                <button type="button" class="dropdown-item d-flex align-items-center gap-2 rounded-2" data-bs-theme-value="dark">
+                                    <i class="fas fa-moon opacity-50"></i> Dark
+                                </button>
+                            </li>
+                            <li>
+                                <button type="button" class="dropdown-item d-flex align-items-center gap-2 rounded-2" data-bs-theme-value="auto">
+                                    <i class="fas fa-circle-half-stroke opacity-50"></i> System
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    
+                    <div class="collapse navbar-collapse" id="navMenu">
+                        <ul class="nav-links ms-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+                                    <i class="fas fa-home"></i>Home
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Students" asp-action="Index">
+                                    <i class="fas fa-users"></i>Students
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">
+                                    <i class="fas fa-shield-alt"></i>Privacy
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container-custom">
+            @RenderBody()
+        </div>
+    </div>
+
+    <!-- Scroll to Top Button -->
+    <button class="scroll-top" id="scrollToTop" onclick="scrollToTop()" title="Back to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container-custom">
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <h5>
+                        <i class="fas fa-graduation-cap me-2"></i>
+                        Student MS
+                    </h5>
+                    <p class="mt-3" style="color: rgba(255,255,255,0.85); line-height: 1.6;">
+                        A modern student management system built with ASP.NET Core and Dapper for optimal performance.
+                    </p>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-icon" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+                
+                <div class="col-md-2">
+                    <h5>Quick Links</h5>
+                    <ul class="footer-links">
+                        <li><a asp-area="" asp-controller="Home" asp-action="Index"><i class="fas fa-chevron-right"></i> Home</a></li>
+                        <li><a asp-area="" asp-controller="Students" asp-action="Index"><i class="fas fa-chevron-right"></i> Students</a></li>
+                        <li><a asp-area="" asp-controller="Home" asp-action="Privacy"><i class="fas fa-chevron-right"></i> Privacy</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-md-3">
+                    <h5>Resources</h5>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Documentation</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> API Reference</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Support</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-md-3">
+                    <h5>Newsletter</h5>
+                    <p style="color: rgba(255,255,255,0.85); font-size: 0.9rem;">
+                        Subscribe for updates and news.
+                    </p>
+                    <div class="input-group mt-2">
+                        <input type="email" class="form-control" placeholder="Your email" 
+                               style="border-radius: 8px 0 0 8px;">
+                        <button class="btn btn-primary-custom" style="border-radius: 0 8px 8px 0; padding: 0.7rem 1rem;">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <hr class="my-4" style="background-color: rgba(255,255,255,0.15);">
+            
+            <div class="text-center">
+                <p style="margin: 0; color: rgba(255,255,255,0.75);">
+                    &copy; @DateTime.Now.Year Student Management System. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    
+    <script>
+        // Theme Management
+        (() => {
+            'use strict'
+
+            const getStoredTheme = () => localStorage.getItem('theme')
+            const setStoredTheme = theme => localStorage.setItem('theme', theme)
+
+            const getPreferredTheme = () => {
+                const storedTheme = getStoredTheme()
+                if (storedTheme) {
+                    return storedTheme
+                }
+                return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+            }
+
+            const setTheme = theme => {
+                if (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    document.documentElement.setAttribute('data-bs-theme', 'dark')
+                } else {
+                    document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? 'light' : theme)
+                }
+            }
+
+            setTheme(getPreferredTheme())
+
+            const showActiveTheme = (theme, focus = false) => {
+                const themeSwitcher = document.querySelector('#bd-theme')
+                if (!themeSwitcher) return
+
+                const activeThemeIcon = document.querySelector('.theme-icon-active')
+                const btnToActive = document.querySelector(`[data-bs-theme-value="${theme}"]`)
+                const iconOfActiveBtn = btnToActive.querySelector('i').className
+
+                document.querySelectorAll('[data-bs-theme-value]').forEach(element => {
+                    element.classList.remove('active')
+                    element.setAttribute('aria-pressed', 'false')
+                })
+
+                btnToActive.classList.add('active')
+                btnToActive.setAttribute('aria-pressed', 'true')
+                activeThemeIcon.className = iconOfActiveBtn + ' theme-icon-active'
+                
+                if (focus) {
+                    themeSwitcher.focus()
+                }
+            }
+
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+                const storedTheme = getStoredTheme()
+                if (storedTheme !== 'light' && storedTheme !== 'dark') {
+                    setTheme(getPreferredTheme())
+                }
+            })
+
+            window.addEventListener('DOMContentLoaded', () => {
+                showActiveTheme(getPreferredTheme())
+
+                document.querySelectorAll('[data-bs-theme-value]')
+                    .forEach(toggle => {
+                        toggle.addEventListener('click', () => {
+                            const theme = toggle.getAttribute('data-bs-theme-value')
+                            setStoredTheme(theme)
+                            setTheme(theme)
+                            showActiveTheme(theme, true)
+                        })
+                    })
+            })
+        })()
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 30) {
+                navbar.classList.add('scrolled', 'shadow-sm');
+            } else {
+                navbar.classList.remove('scrolled', 'shadow-sm');
+            }
+        });
+
+        // Other existing functions...
+        function showLoading() {
+            document.getElementById('loadingOverlay').style.display = 'flex';
+        }
+        function hideLoading() {
+            document.getElementById('loadingOverlay').style.display = 'none';
+        }
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast-custom ${type} animate-slide-up`;
+            toast.innerHTML = `<span>${message}</span>`;
+            document.getElementById('toastContainer').appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+    </script>
+    
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

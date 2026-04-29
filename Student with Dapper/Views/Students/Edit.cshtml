@@ -1,0 +1,75 @@
+@model Student_with_Dapper.Models.Student
+
+@{
+    ViewData["Title"] = "Edit Student";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+        <div class="glass-card animate-scale-in">
+            <div class="text-center mb-4">
+                <div class="icon-circle mb-3 mx-auto" style="width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #fbbf24, #d97706); font-size: 1.5rem; color: white; box-shadow: var(--shadow-md);">
+                    <i class="fas fa-user-pen"></i>
+                </div>
+                <h2 style="font-weight: 700;" class="text-warning-emphasis">Edit Student</h2>
+                <p class="text-muted">Update information for <span class="text-primary fw-bold">@Model.Name</span></p>
+            </div>
+
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                <input type="hidden" asp-for="Id" />
+
+                <div class="glass-form-group">
+                    <label asp-for="Name" class="glass-form-label">
+                        <i class="fas fa-user"></i>Full Name
+                    </label>
+                    <input asp-for="Name" class="form-control glass-input" placeholder="e.g. John Doe" />
+                    <span asp-validation-for="Name" class="text-danger small"></span>
+                </div>
+
+                <div class="glass-form-group">
+                    <label asp-for="Email" class="glass-form-label">
+                        <i class="fas fa-envelope"></i>Email Address
+                    </label>
+                    <input asp-for="Email" class="form-control glass-input" placeholder="e.g. john@example.com" />
+                    <span asp-validation-for="Email" class="text-danger small"></span>
+                </div>
+
+                <div class="glass-form-group">
+                    <label asp-for="Age" class="glass-form-label">
+                        <i class="fas fa-calendar-alt"></i>Student Age
+                    </label>
+                    <input asp-for="Age" class="form-control glass-input" placeholder="e.g. 20" />
+                    <span asp-validation-for="Age" class="text-danger small"></span>
+                </div>
+
+                <div class="glass-form-group">
+                    <label class="glass-form-label text-muted small text-uppercase fw-bold">
+                        <i class="fas fa-clock text-primary"></i>Registration Date
+                    </label>
+                    <div class="p-3 rounded-3 bg-body-secondary border border-white border-opacity-10 d-flex align-items-center gap-3">
+                        <i class="fas fa-calendar-check text-success fs-5"></i>
+                        <div>
+                            <div class="fw-bold text-primary-emphasis">@Model.CreatedDate.ToString("MMMM dd, yyyy")</div>
+                            <small class="text-muted">Recorded at @Model.CreatedDate.ToString("HH:mm")</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-grid gap-3 mt-5">
+                    <button type="submit" class="btn-primary-custom w-100 justify-content-center py-3">
+                        <i class="fas fa-save"></i>
+                        <span>Save Changes</span>
+                    </button>
+                    <a asp-action="Index" class="btn btn-link text-muted text-decoration-none text-center py-2">
+                        <i class="fas fa-times me-1"></i>Discard Changes
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

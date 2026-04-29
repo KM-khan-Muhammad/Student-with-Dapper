@@ -1,0 +1,62 @@
+@model Student_with_Dapper.Models.Student
+
+@{
+    ViewData["Title"] = "Delete Student";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-7 col-lg-6">
+        <div class="glass-card animate-slide-up border-top border-danger border-5">
+            <div class="mb-4">
+                <h2 class="h3 fw-bold text-danger mb-1">Delete Record?</h2>
+                <p class="text-muted small">This action is permanent and cannot be reversed.</p>
+            </div>
+
+            <div class="p-4 rounded-3 bg-body-secondary border border-white border-opacity-10 mb-5">
+                <div class="row align-items-center">
+                    <div class="col-auto">
+                        <div class="h3 mb-0 fw-bold text-danger">
+                            @Model.Name.Substring(0, 1).ToUpper()
+                        </div>
+                    </div>
+                    <div class="col">
+                        <h4 class="h6 fw-bold mb-1">@Model.Name</h4>
+                        <div class="small text-muted">@Model.Email</div>
+                    </div>
+                    <div class="col-auto text-end">
+                        <span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25">ID: #@Model.Id</span>
+                    </div>
+                </div>
+            </div>
+
+            <form asp-action="Delete">
+                <input type="hidden" asp-for="Id" />
+                <div class="d-flex flex-column gap-3">
+                    <button type="submit" class="btn btn-danger rounded-3 py-3 fw-bold shadow-sm">
+                        <i class="fas fa-trash-alt me-2"></i>Permanently Delete Student
+                    </button>
+                    <a asp-action="Index" class="btn btn-link text-muted text-decoration-none text-center">
+                        <i class="fas fa-times me-1"></i>Cancel and Return
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .animate-pulse {
+        animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    @@keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: .5; }
+    }
+    
+    .btn-danger:hover {
+        transform: translateY(-2px);
+        background-color: #dc2626;
+        box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+    }
+</style>

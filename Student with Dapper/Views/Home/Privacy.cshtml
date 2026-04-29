@@ -1,0 +1,95 @@
+@{
+    ViewData["Title"] = "Privacy Policy";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-9 col-xl-8">
+        <div class="glass-card animate-slide-up">
+            <div class="text-center mb-5">
+                <div class="icon-circle bg-primary-light text-white mb-3 mx-auto" style="width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, var(--primary-light), var(--primary-color)); font-size: 2rem; box-shadow: var(--shadow-md);">
+                    <i class="fas fa-shield-halved"></i>
+                </div>
+                <h1 class="fw-bold text-primary-emphasis">Privacy Policy</h1>
+                <p class="text-muted">Last updated: @DateTime.Now.ToString("MMMM dd, yyyy")</p>
+            </div>
+
+            <div class="privacy-content px-md-4">
+                <section class="mb-5">
+                    <h3 class="h5 fw-bold mb-3 d-flex align-items-center gap-2">
+                        <i class="fas fa-database text-primary"></i>
+                        Data Collection
+                    </h3>
+                    <p class="text-secondary-emphasis">
+                        We collect minimal information required to manage student records effectively. This includes:
+                    </p>
+                    <ul class="list-group list-group-flush bg-transparent">
+                        <li class="list-group-item bg-transparent border-0 ps-0 d-flex gap-2">
+                            <i class="fas fa-check-circle text-success mt-1"></i>
+                            <span>Student names and basic contact information (Email).</span>
+                        </li>
+                        <li class="list-group-item bg-transparent border-0 ps-0 d-flex gap-2">
+                            <i class="fas fa-check-circle text-success mt-1"></i>
+                            <span>Academic demographic data such as age and enrollment date.</span>
+                        </li>
+                        <li class="list-group-item bg-transparent border-0 ps-0 d-flex gap-2">
+                            <i class="fas fa-check-circle text-success mt-1"></i>
+                            <span>System-generated identifiers for record management.</span>
+                        </li>
+                    </ul>
+                </section>
+
+                <section class="mb-5">
+                    <h3 class="h5 fw-bold mb-3 d-flex align-items-center gap-2">
+                        <i class="fas fa-user-shield text-primary"></i>
+                        Data Security
+                    </h3>
+                    <p class="text-secondary-emphasis">
+                        Your data security is our top priority. We implement modern security measures to protect your information:
+                    </p>
+                    <div class="p-3 rounded-4 bg-body-secondary border border-white border-opacity-10 mb-3">
+                        <p class="mb-0 small text-muted">
+                            All database operations are performed using <strong>Dapper</strong> with parameterized queries to prevent SQL injection. Our system leverages ASP.NET Core's built-in security features to ensure data integrity.
+                        </p>
+                    </div>
+                </section>
+
+                <section class="mb-5">
+                    <h3 class="h5 fw-bold mb-3 d-flex align-items-center gap-2">
+                        <i class="fas fa-scale-balanced text-primary"></i>
+                        Your Rights
+                    </h3>
+                    <p class="text-secondary-emphasis">
+                        As a user or administrator of this system, you have the following rights regarding student data:
+                    </p>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="p-3 h-100 rounded-3 bg-body-tertiary border border-white border-opacity-10">
+                                <h4 class="h6 fw-bold mb-2">Access & Update</h4>
+                                <p class="small text-muted mb-0">View and modify records at any time through the intuitive management dashboard.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="p-3 h-100 rounded-3 bg-body-tertiary border border-white border-opacity-10">
+                                <h4 class="h6 fw-bold mb-2">Data Deletion</h4>
+                                <p class="small text-muted mb-0">Permanently remove student records from the system when they are no longer needed.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="text-center mt-5 pt-4 border-top">
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-primary rounded-pill px-4">
+                        <i class="fas fa-arrow-left me-2"></i>Return to Home
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .list-group-item {
+        color: var(--text-main);
+    }
+</style>
+

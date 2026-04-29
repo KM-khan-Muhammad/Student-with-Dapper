@@ -1,0 +1,151 @@
+@model IEnumerable<Student_with_Dapper.Models.Student>
+
+@{
+    ViewData["Title"] = "Students List";
+}
+
+<div class="glass-card animate-slide-up mb-4">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+        <div>
+            <h2 class="h3 mb-0 fw-bold text-primary-emphasis">Students</h2>
+            <p class="text-muted small mb-0">Manage student records effortlessly.</p>
+        </div>
+        <a asp-action="Create" class="btn btn-primary rounded-3 px-4 py-2 fw-bold d-inline-flex align-items-center gap-2">
+            <i class="fas fa-plus"></i> Add Student
+        </a>
+    </div>
+</div>
+
+<div class="glass-card animate-slide-up" style="animation-delay: 0.1s;">
+    <!-- Simple Search Bar -->
+    <div class="mb-4">
+        <div class="input-group shadow-sm rounded-3 overflow-hidden border border-white border-opacity-10">
+            <span class="input-group-text bg-body-secondary border-0 px-3">
+                <i class="fas fa-search text-muted"></i>
+            </span>
+            <input type="text" id="studentSearch" class="form-control border-0 bg-body-secondary py-2" placeholder="Search by name or email..." aria-label="Search">
+            <button class="btn btn-secondary border-0 px-3" type="button" id="clearSearch">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div id="searchStats" class="mt-2 ps-1 small text-muted">
+            Total Records: <span class="fw-bold text-primary">@Model.Count()</span>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table align-middle border-top" id="studentTable">
+            <thead class="bg-body-tertiary">
+                <tr>
+                    <th class="py-3 px-3 small text-uppercase fw-bold text-muted">Name</th>
+                    <th class="py-3 px-3 small text-uppercase fw-bold text-muted d-none d-md-table-cell">Email</th>
+                    <th class="py-3 px-3 small text-uppercase fw-bold text-muted text-center">Age</th>
+                    <th class="py-3 px-3 small text-uppercase fw-bold text-muted text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="border-top-0">
+                @foreach (var item in Model)
+                {
+                    <tr class="student-row">
+                        <td class="px-3 py-3">
+                            <div class="fw-bold text-primary-emphasis student-name">@item.Name</div>
+                            <small class="text-muted d-md-none student-email">@item.Email</small>
+                        </td>
+                        <td class="px-3 py-3 d-none d-md-table-cell student-email text-secondary-emphasis">@item.Email</td>
+                        <td class="px-3 py-3 text-center">
+                            <span class="badge bg-body-secondary text-primary-emphasis border border-white border-opacity-10 px-3 py-2">
+                                @item.Age yrs
+                            </span>
+                        </td>
+                        <td class="px-3 py-3 text-center">
+                            <div class="d-flex justify-content-center gap-2">
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning border-0" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a asp-action="Detail" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info border-0" title="Details">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger border-0" title="Delete">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- Simple No Results -->
+    <div id="noResults" class="text-center py-5 d-none">
+        <p class="text-muted mb-0">No matching students found.</p>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            const $searchInput = $('#studentSearch');
+            const $table = $('#studentTable');
+            const $rows = $('.student-row');
+            const $noResults = $('#noResults');
+            const $stats = $('#searchStats');
+            const totalCount = @Model.Count();
+
+            $searchInput.on('keyup', function() {
+                const value = $(this).val().toLowerCase();
+                let visibleCount = 0;
+
+                $rows.each(function() {
+                    const name = $(this).find('.student-name').text().toLowerCase();
+                    const email = $(this).find('.student-email').text().toLowerCase();
+                    const match = name.includes(value) || email.includes(value);
+                    
+                    $(this).toggle(match);
+                    if (match) visibleCount++;
+                });
+
+                // Update UI states
+                if (visibleCount === 0) {
+                    $table.addClass('d-none');
+                    $noResults.removeClass('d-none');
+                } else {
+                    $table.removeClass('d-none');
+                    $noResults.addClass('d-none');
+                }
+
+                // Update stats text
+                if (value === "") {
+                    $stats.html(`Showing all <span class="fw-bold text-primary">${totalCount}</span> students`);
+                } else {
+                    $stats.html(`Found <span class="fw-bold text-primary">${visibleCount}</span> student${visibleCount !== 1 ? 's' : ''} matching your search`);
+                }
+            });
+
+            $('#clearSearch').on('click', function() {
+                $searchInput.val('').trigger('keyup').focus();
+            });
+        });
+    </script>
+}
+
+<style>
+    .btn-group .btn {
+        transition: var(--transition);
+        border-width: 1.5px;
+    }
+    
+    .btn-group .btn:hover {
+        transform: translateY(-2px);
+    }
+
+    .custom-table tr {
+        transition: var(--transition);
+    }
+
+    [data-bs-theme="dark"] .bg-primary-subtle {
+        background-color: rgba(129, 140, 248, 0.1) !important;
+    }
+</style>
+
+
