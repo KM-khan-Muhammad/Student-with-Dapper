@@ -15,8 +15,7 @@ namespace Student_with_Dapper.RPO
         }
         public async Task<bool> Create(Student student)
         {
-            var data= @"
-                INSERT INTO Students (Name, Email, Age, CreatedDate)
+            var data= @" INSERT INTO Students (Name, Email, Age, CreatedDate)
                 VALUES (@Name, @Email, @Age, GETDate())";
             using var connection =   _con.CreateConnection();
             var result =await connection.ExecuteAsync(data, student);
